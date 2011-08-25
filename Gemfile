@@ -6,6 +6,7 @@ gem 'bson_ext'
 gem 'mongo'
 gem 'rake', '0.8.7'
 gem 'haml'
+gem 'googlecharts'
 
 group :development, :test do
   gem 'rspec'
