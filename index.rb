@@ -1,6 +1,7 @@
 require 'sinatra'
 require 'mongo'
 require 'mongoid'
+require 'haml'
 
 Dir.glob("lib/**").each do |file|
   require File.join(File.dirname(__FILE__), file)
@@ -16,5 +17,7 @@ configure do
 end
 
 get '/' do
-  "hello"
+  @fields = Measurment.field_names
+  @measurments = Measurment.find(:all)
+  haml :index
 end

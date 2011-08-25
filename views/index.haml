@@ -1,0 +1,8 @@
+%table
+  %tr
+    -@fields.each do |name|
+      %th=name
+  -@measurments.each do |meas|
+    %tr
+      -@fields.each do |field|
+        %td=meas.send(field)
