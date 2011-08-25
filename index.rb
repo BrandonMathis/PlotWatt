@@ -10,6 +10,8 @@ Dir.glob("lib/**").each do |file|
   require File.join(File.dirname(__FILE__), file)
 end
 
+MONTHS = [nil, "Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"]
+
 configure do
    Mongoid.configure do |config|
     name = "PlotWatt"
@@ -27,19 +29,42 @@ end
 
 get '/' do
   measurments = Measurment.find(:all)
-  total_over_time = measurments.map { |meas| meas.total_usage }
-  labels = measurments.map { |meas| meas.collected.to_s }
-  @line=Gchart.line(:size => '900x300',
-            :title => "Energy Usage",
-            :bg => 'efefef',
-            :legend => ['Total Usage'],
-            :data => total_over_time,
-            )
-  @pie=Gchart.pie_3d(
+  @line = line_chart(measurments)
+  @pie = total_pie_chart(Measurment.totals)
+  monthly_measurments = {}
+  MONTHS.each do |month|
+    monthly_measurments[month] = Measurment.find_by_month(month)
+  end
+  haml :index
+end
+
+get '/energy/:month' do
+  measurments = Measurment.find_by_month(params[:month])
+  if measurments.empty?
+    haml :no_usage
+  elsif MONTHS.include?(params[:month])
+    @line = line_chart(measurments)
+    @pie = total_pie_chart(Measurment.totals_for_month(params[:month]))
+    haml :month
+  end
+end
+
+def total_pie_chart(totals)
+  Gchart.pie_3d(
     :size => '900x300',
     :title => "Total Usage",
-    :data => Measurment.totals,
+    :data => totals,
     :labels => ["Always on", "Heating & A/C", "Refrigeration", "Dryer", "Cooking", "Other"]
   )
-  haml :index
+end
+
+def line_chart(measurments)
+  totals_over_time = measurments.map { |meas| meas.total_usage }
+  Gchart.line(
+    :size => '900x300',
+    :title => "Energy Usage",
+    :bg => 'efefef',
+    :legend => ['Total Usage'],
+    :data => totals_over_time,
+  )
 end

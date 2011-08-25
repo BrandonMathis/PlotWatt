@@ -1,4 +1,10 @@
 %h1 PlotWatt Data Visulaiziation
-%link(rel="stylesheet" type="text/css" href="style.css")
+%link(rel="stylesheet" type="text/css" href="/style.css")
 
+#menu
+  %ul
+    -MONTHS.each do |month|
+      -if month
+        %li.menu_item
+          %a{:href=>"/energy/#{month}"}=month
 =yield
