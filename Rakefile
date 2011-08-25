@@ -21,13 +21,16 @@ namespace :db do
 end
 
 def csv_into_mongo(file)
+  require 'time'
   attrs = {}
   measurments = CSV.read(file)
   measurments[1..measurments.length].each do |row|
     attrs = Hash.create(Measurment.field_names, row)
     attrs.each do |key, value|
-      attrs[key] = value.to_f unless key == :datetime
-      attrs[key] = Time.new(value) if key == :datetime
+      attrs[key] = value.to_f unless key == :collected
+      if key == :collected
+        attrs[key] = Time.parse(value.chomp) 
+      end
     end
     Measurment.create(attrs)
   end
