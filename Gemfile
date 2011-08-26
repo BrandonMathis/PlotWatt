@@ -9,6 +9,7 @@ gem 'haml'
 gem 'googlecharts'
 
 group :development, :test do
+  gem 'rack-test'
   gem 'rspec'
   gem 'rspec-given', :require => 'rspec/given'
   gem 'awesome_print'

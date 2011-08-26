@@ -30,7 +30,7 @@ end
 get '/' do
   measurments = Measurment.find(:all)
   @line = line_chart(measurments, :range => 'lifetime')
-  @pie = total_pie_chart(Measurment.totals)
+  @pie = total_pie_chart(Measurment.totals.values)
   monthly_measurments = {}
   MONTHS.each do |month|
     monthly_measurments[month] = Measurment.find_by_month(month)
@@ -44,7 +44,7 @@ get '/energy/:month' do
     haml :no_usage
   elsif MONTHS.include?(params[:month])
     @line = line_chart(measurments, :range => params[:month])
-    @pie = total_pie_chart(Measurment.totals_for_month(params[:month]))
+    @pie = total_pie_chart(Measurment.totals_for_month(params[:month]).values)
     haml :month
   end
 end

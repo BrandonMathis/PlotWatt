@@ -25,10 +25,10 @@ class Measurment
     totals = {:always_on => 0, :ac => 0, :refrigeration => 0, :dryer => 0, :cooking => 0, :other => 0}
     measurments.each do |meas|
       totals.each do |key, value|
-        totals[key] = totals[key] + meas.send(key)
+        totals[key] = totals[key] + meas.send(key) if meas.send(key)
       end
     end
-    totals.values
+    totals
   end
 
   def self.find_by_month(month)
