@@ -1,5 +1,6 @@
 #menu li{
   list-style-type: none;
   display: inline;
+  float: left;
   padding: 0 10px;
 }
