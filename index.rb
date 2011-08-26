@@ -15,8 +15,9 @@ MONTHS = [nil, "Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Se
 configure do
   Mongoid.configure do |config|
     name = "PlotWatt"
-    host = "localhost"
-    config.master = Mongo::Connection.new.db(name)
+    host = "mongodb://KeysetTS:chunkybacon@staff.mongohq.com:10050/PlotWatt"
+    connection = Mongo::Connection.from_uri(host)
+    config.master = connection.db(name)
     config.persist_in_safe_mode = false
   end
 end
