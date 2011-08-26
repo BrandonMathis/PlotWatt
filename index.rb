@@ -2,7 +2,6 @@ require 'sinatra'
 require 'mongo'
 require 'mongoid'
 require 'haml'
-require 'awesome_print'
 require 'gchart'
 
 
